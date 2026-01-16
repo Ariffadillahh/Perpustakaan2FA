@@ -38,7 +38,7 @@ Buka terminal (CMD/Git Bash) dan jalankan perintah:
 
 ```bash
 git clone https://github.com/Ariffadillahh/Perpustakaan2FA.git
-cd nama-repo-perpustakaan 
+cd Perpustakaan2FA 
 ```
 
 ### Install Dependencies
