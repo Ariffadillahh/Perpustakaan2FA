@@ -30,14 +30,6 @@ class LoanService
     {
         $user = Auth::user();
 
-        // Cek denda yang belum dibayar (Logic Blocking)
-        $totalFine = Loan::where('user_id', $user->id)
-            ->where('status', 'returned')
-            ->sum('fine_amount');
-        if ($totalFine > 0) {
-            return ['status' => false, 'message' => 'Anda memiliki denda yang belum dilunasi!'];
-        }
-
         // Cek apakah sedang meminjam buku yang sama dan belum balik
         $isBorrowing = Loan::where('user_id', $user->id)
             ->where('book_id', $data['book_id'])

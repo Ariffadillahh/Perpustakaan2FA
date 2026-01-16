@@ -3,6 +3,12 @@
     [x-cloak] {
         display: none !important;
     }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Tambahan agar scroll halus */
 </style>
 
 <nav class="bg-[#0f392b]/95 text-white sticky top-0 z-[50] shadow-xl border-b border-[#c5a059]/30 backdrop-blur-md"
@@ -24,11 +30,14 @@
             </a>
 
             <div class="hidden md:flex items-center space-x-6">
-                <a href="/" class="text-white/80 hover:text-[#c5a059] text-sm font-medium transition">Beranda</a>
-                <a href="#koleksi" class="text-white/80 hover:text-[#c5a059] text-sm font-medium transition">Koleksi
-                    Buku</a>
-                <a href="#tentang" class="text-white/80 hover:text-[#c5a059] text-sm font-medium transition">Tentang
-                    Kami</a>
+                <a href="{{ url('/') }}"
+                    class="text-white/80 hover:text-[#c5a059] text-sm font-medium transition">Beranda</a>
+
+                {{-- PERBAIKAN DI SINI: Gunakan url('/#...') --}}
+                <a href="{{ url('/#koleksi') }}"
+                    class="text-white/80 hover:text-[#c5a059] text-sm font-medium transition">Koleksi Buku</a>
+                <a href="{{ url('/#tentang') }}"
+                    class="text-white/80 hover:text-[#c5a059] text-sm font-medium transition">Tentang Kami</a>
 
                 <button @click="searchOpen = true" class="p-2 rounded-full hover:bg-white/10 transition group">
                     <svg class="w-5 h-5 text-white/80 group-hover:text-[#c5a059]" fill="none" stroke="currentColor"
@@ -88,10 +97,7 @@
                                 <p class="font-bold text-[#0f392b] truncate">{{ Auth::user()->email }}</p>
                             </div>
 
-                            {{-- LOGIKA ROLE: 1 & 2 (Admin/Petugas), 3 (Anggota) --}}
-
                             @if (Auth::user()->role_id == 3)
-                                {{-- MENU ANGGOTA --}}
                                 <a href="{{ route('loans.index') }}"
                                     class="flex items-center px-4 py-3 hover:bg-[#f0fdf4] text-gray-700 hover:text-[#0f392b] transition-colors">
                                     <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
@@ -112,7 +118,6 @@
                                     Profile
                                 </a>
                             @else
-                                {{-- MENU ADMIN / PETUGAS --}}
                                 <a href="{{ route('dashboard') }}"
                                     class="flex items-center px-4 py-3 hover:bg-[#f0fdf4] text-gray-700 hover:text-[#0f392b] transition-colors">
                                     <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor"
@@ -179,9 +184,12 @@
     </div>
 
     <div x-show="mobileOpen" x-cloak class="md:hidden bg-[#0a261d] px-6 py-4 space-y-3">
-        <a href="/" class="block text-white/80 hover:text-[#c5a059] py-2">Beranda</a>
-        <a href="#koleksi" class="block text-white/80 hover:text-[#c5a059] py-2">Koleksi Buku</a>
-        <a href="#tentang" class="block text-white/80 hover:text-[#c5a059] py-2">Tentang Kami</a>
+        <a href="{{ url('/') }}" class="block text-white/80 hover:text-[#c5a059] py-2">Beranda</a>
+
+        {{-- PERBAIKAN MOBILE: Gunakan url('/#...') --}}
+        <a href="{{ url('/#koleksi') }}" class="block text-white/80 hover:text-[#c5a059] py-2">Koleksi Buku</a>
+        <a href="{{ url('/#tentang') }}" class="block text-white/80 hover:text-[#c5a059] py-2">Tentang Kami</a>
+
         @guest
             <div class="pt-3 border-t border-white/10 space-y-2">
                 <a href="{{ route('login') }}" class="block text-white hover:text-[#c5a059] py-2">Masuk</a>
@@ -211,7 +219,6 @@
                 </div>
 
                 <div class="space-y-1">
-                    {{-- LOGIKA ROLE MOBILE --}}
                     @if (Auth::user()->role_id == 3)
                         <a href="{{ route('loans.index') }}"
                             class="flex items-center gap-3 text-white/80 hover:text-[#c5a059] hover:bg-white/5 px-3 py-3 rounded-lg transition-colors">

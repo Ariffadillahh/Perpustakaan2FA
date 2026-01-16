@@ -8,6 +8,23 @@
         <div class="absolute top-0 left-0 w-full h-[250px] md:h-[300px] bg-[#0f392b] clip-path-slant z-0"></div>
 
         <div class="container mx-auto px-4 md:px-6 lg:px-12 relative pt-6 md:pt-8 z-10">
+
+            {{-- NOTIFIKASI --}}
+            @if (session('success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-sm"
+                    role="alert">
+                    <p class="font-bold">Berhasil!</p>
+                    <p>{{ session('success') }}</p>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm" role="alert">
+                    <p class="font-bold">Gagal!</p>
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
+
             {{-- Glassmorphism Breadcrumb --}}
             <nav class="flex mb-6 bg-white/10 backdrop-blur-md border border-white/20 w-fit px-4 py-2 rounded-xl shadow-xl">
                 <ol class="flex items-center space-x-2 text-xs">
@@ -167,52 +184,97 @@
                                         <div class="absolute -right-8 -top-3 w-6 h-6 bg-[#f8fafc] rounded-full"></div>
                                     </div>
 
-                                    <button type="submit" id="loanBtn" @if ($book->stock <= 0) disabled @endif
-                                        class="group w-full relative overflow-hidden rounded-xl py-3 md:py-4 px-6 transition-all shadow-[0_10px_30px_rgba(197,160,89,0.2)] disabled:cursor-not-allowed disabled:shadow-none bg-[#c5a059]">
-
-                                        @if ($book->stock > 0)
+                                    <div class="mt-8">
+                                        @php $totalDendaBorrowed = $loans->where('status', 'borrowed')->sum('current_fine'); @endphp @if ($totalDendaBorrowed > 0)
                                             <div
-                                                class="absolute inset-0 bg-gradient-to-r from-[#c5a059] to-[#e0c070] transition-all group-hover:scale-105">
+                                                class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 flex gap-3 items-start">
+                                                <div class="bg-red-100 p-2 rounded-full text-red-600">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-red-700 font-bold text-sm mb-1">
+                                                        Tunggakan Denda Terdeteksi
+                                                    </h4>
+                                                    <p class="text-xs text-red-600 leading-relaxed mb-2">
+                                                        Anda memiliki total denda sebesar
+                                                        <span class="font-bold">Rp
+                                                            {{ number_format($totalDendaBorrowed, 0, ',', '.') }}</span>
+                                                        yang belum dilunasi.
+                                                    </p>
+                                                    <p class="text-[10px] text-red-500 italic">
+                                                        Silakan lunasi pembayaran di perpustakaan ("Bayar oi").
+                                                    </p>
+                                                </div>
                                             </div>
 
-                                            {{-- Content Normal --}}
-                                            <div id="btnContent"
-                                                class="relative flex items-center justify-center gap-3 text-[#0f392b] font-black text-[10px] md:text-xs uppercase tracking-[0.25em]">
-                                                <span>Konfirmasi Peminjaman</span>
-                                                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1"
-                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                                </svg>
-                                            </div>
-
-                                            {{-- Content Loading (Hidden Default) --}}
-                                            <div id="btnLoading"
-                                                class="hidden relative flex items-center justify-center gap-3 text-[#0f392b] font-black text-[10px] md:text-xs uppercase tracking-[0.25em]">
-                                                <svg class="animate-spin h-4 w-4 text-[#0f392b]"
-                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24">
-                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                        stroke="currentColor" stroke-width="4"></circle>
-                                                    <path class="opacity-75" fill="currentColor"
-                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                    </path>
-                                                </svg>
-                                                <span>Memproses...</span>
-                                            </div>
-                                        @else
-                                            <div class="absolute inset-0 bg-slate-700"></div>
-                                            <div
-                                                class="relative flex items-center justify-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                                            <button disabled
+                                                class="w-full py-4 bg-gray-200 text-gray-400 font-bold rounded-xl cursor-not-allowed shadow-none flex items-center justify-center gap-2 uppercase tracking-widest text-xs border border-gray-300">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                                 </svg>
-                                                Stok Habis
-                                            </div>
+                                                Akses Peminjaman Dikunci
+                                            </button>
+                                        @else
+                                            <button type="submit" id="loanBtn"
+                                                @if ($book->stock <= 0) disabled @endif
+                                                class="group w-full relative
+                    overflow-hidden rounded-xl py-3 md:py-4 px-6 transition-all
+                    shadow-[0_10px_30px_rgba(197,160,89,0.2)]
+                    disabled:cursor-not-allowed disabled:shadow-none
+                    bg-[#c5a059]">
+                                                @if ($book->stock > 0)
+                                                    <div
+                                                        class="absolute inset-0 bg-gradient-to-r from-[#c5a059] to-[#e0c070] transition-all group-hover:scale-105">
+                                                    </div>
+
+                                                    <div id="btnContent"
+                                                        class="relative flex items-center justify-center gap-3 text-[#0f392b] font-black text-[10px] md:text-xs uppercase tracking-[0.25em]">
+                                                        <span>Konfirmasi Peminjaman</span>
+                                                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1"
+                                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                        </svg>
+                                                    </div>
+
+                                                    {{-- Loading State --}}
+                                                    <div id="btnLoading"
+                                                        class="hidden relative flex items-center justify-center gap-3 text-[#0f392b] font-black text-[10px] md:text-xs uppercase tracking-[0.25em]">
+                                                        <svg class="animate-spin h-4 w-4 text-[#0f392b]"
+                                                            xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24">
+                                                            <circle class="opacity-25" cx="12" cy="12"
+                                                                r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                            <path class="opacity-75" fill="currentColor"
+                                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                            </path>
+                                                        </svg>
+                                                        <span>Memproses...</span>
+                                                    </div>
+                                                @else
+                                                    {{-- STOK HABIS --}}
+                                                    <div class="absolute inset-0 bg-slate-700"></div>
+                                                    <div
+                                                        class="relative flex items-center justify-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                        </svg>
+                                                        Stok Habis
+                                                    </div>
+                                                @endif
+                                            </button>
                                         @endif
-                                    </button>
+                                    </div>
 
                                     @if ($book->stock > 0)
                                         <p class="text-center text-[8px] md:text-[9px] text-white/30 mt-3 font-light px-4">

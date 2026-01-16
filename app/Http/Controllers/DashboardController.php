@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Backup;
 use App\Models\Book;
 use App\Models\Loan;
 use App\Models\User;
@@ -26,10 +27,11 @@ class DashboardController extends Controller
     }
 
     public function index()
-    {
+    { 
         $totalBooks =   Book::count();
         $totalMembers = User::where('role_id', 3)->count();
         $activeLoans = Loan::where('status', 'borrowed')->count();
+        $backups = Backup::latest()->get();
 
         $categories = $this->categoryService->getAllCategories();
 
@@ -37,7 +39,8 @@ class DashboardController extends Controller
             'totalBooks',
             'totalMembers',
             'activeLoans',
-            'categories'
+            'categories',
+            'backups'
         ));
     }
 }

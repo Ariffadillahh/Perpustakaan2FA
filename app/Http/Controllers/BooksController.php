@@ -6,15 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Book\StoreBookRequest;
 use App\Http\Requests\Book\UpdateBookRequest;
 use App\Services\BookService;
+use App\Services\LoanService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BooksController extends Controller
 {
     protected $bookService;
+    protected $loanService;
 
-    public function __construct(BookService $bookService)
+
+    public function __construct(BookService $bookService, LoanService $loanService)
     {
         $this->bookService = $bookService;
+        $this->loanService = $loanService;
     }
 
     public function index(Request $request)
@@ -30,8 +35,11 @@ class BooksController extends Controller
 
     public function show($id)
     {
+        $user = Auth::user();
+
         $book = $this->bookService->getBookById($id);
-        return view('users.books.show', compact('book'));
+        $loans = $this->loanService->getUserLoans($user->id);
+        return view('users.books.show', compact('book', 'loans'));
     }
 
     public function create()
