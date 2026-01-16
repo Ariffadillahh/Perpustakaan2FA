@@ -37,7 +37,7 @@ Ikuti langkah-langkah berikut untuk menjalankan project ini di komputer lokal (L
 Buka terminal (CMD/Git Bash) dan jalankan perintah:
 
 ```bash
-git clone [https://github.com/username-anda/nama-repo-perpustakaan.git](https://github.com/username-anda/nama-repo-perpustakaan.git)
+git clone https://github.com/Ariffadillahh/Perpustakaan2FA.git
 cd nama-repo-perpustakaan 
 ```
 
@@ -51,7 +51,7 @@ npm install
 ### Konfigurasi Environment
 Duplikat file .env.example menjadi .env
 ```bash
-. cp .env.example .env
+cp .env.example .env
 ```
 
 Generate App Key:
