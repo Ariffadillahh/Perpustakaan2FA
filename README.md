@@ -1,6 +1,6 @@
 # 📚 Sistem Informasi Perpustakaan Digital
 
-Aplikasi manajemen perpustakaan berbasis web yang dibangun menggunakan **Laravel 10**, **MySQL**, dan **Tailwind CSS**. Aplikasi ini dirancang untuk memudahkan pengelolaan buku, peminjaman, anggota, serta dilengkapi fitur keamanan dan *backup* database otomatis.
+Aplikasi manajemen perpustakaan berbasis web yang dibangun menggunakan **Laravel 12**, **MySQL**, dan **Tailwind CSS**. Aplikasi ini dirancang untuk memudahkan pengelolaan buku, peminjaman, anggota, serta dilengkapi fitur keamanan dan *backup* database otomatis.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=flat&logo=laravel&logoColor=white)
@@ -39,7 +39,62 @@ Buka terminal (CMD/Git Bash) dan jalankan perintah:
 ```bash
 git clone [https://github.com/username-anda/nama-repo-perpustakaan.git](https://github.com/username-anda/nama-repo-perpustakaan.git)
 cd nama-repo-perpustakaan 
+```
+
+### Install Dependencies
 
 ```bash
-git clone [https://github.com/username-anda/nama-repo-perpustakaan.git](https://github.com/username-anda/nama-repo-perpustakaan.git)
-cd nama-repo-perpustakaan
+composer install
+npm install
+```
+
+### Konfigurasi Environment
+Duplikat file .env.example menjadi .env
+```bash
+. cp .env.example .env
+```
+
+Generate App Key:
+```bash
+php artisan key:generate
+```
+
+### Setup Storage
+
+```bash
+php artisan storage:link
+```
+
+### ⚡ Migrate & Seeder (Penting!)
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+### ▶️ Menjalankan Aplikasi
+
+Terminal 1 (Vite/Frontend):
+
+```bash
+npm run dev
+```
+
+Terminal 2 (Laravel Server):
+
+```bash
+php artisan serve
+```
+
+### 🔑 Akun Default (Testing)
+
+role Admin 
+email admin@library.com
+password password123
+
+role Petugas 
+email staff@library.com
+password password123
+
+role Member 
+email member@library.com
+password password123
